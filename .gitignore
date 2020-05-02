@@ -1,0 +1,5 @@
+\nvenv
+\venvdir
+\.vscode
+\app\.vscode
+*.pyc
