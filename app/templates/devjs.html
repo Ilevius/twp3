@@ -6,13 +6,58 @@
 <div class="row">
 
     <div class="col-4">
+        <p>
+        <div class="btn-group d-flex justify-content-center" role="group" aria-label="Basic example">
+            <button type="button" class="btn btn-secondary" id="newmtype">Новый метатэг</button>
+            <button type="button" class="btn btn-secondary" id="newtype">Новый тэг</button>
+            <button type="button" class="btn btn-secondary" id="newtopic">Новая тема</button>
+        </div>
+        </p>
         <div class="card">
-            <div class="card-header" id = "explorerheader">
-                Темы
+            <div class="card-header" id = "treeheader">
+                Дерево тем.
             </div>
         
-            <div class="card-body" id = "explorer">
-                Тем пока нет.
+            <div class="card-body" id = "tree">
+
+                <div class="d-flex justify-content-center">
+                    <div class="spinner-border" role="status">
+                      <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header" id = "freetagsheader">
+                Свободные тэги.
+            </div>
+        
+            <div class="card-body" id = "freetags">
+
+                <div class="d-flex justify-content-center">
+                    <div class="spinner-border" role="status">
+                      <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header" id = "freetopicsheader">
+                Свободные темы.
+            </div>
+        
+            <div class="card-body" id = "freetopics">
+
+                <div class="d-flex justify-content-center">
+                    <div class="spinner-border" role="status">
+                      <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
+                
             </div>
         </div>
     </div>

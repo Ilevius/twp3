@@ -44,3 +44,4 @@ def add_metatype():
 
     db.session.add(new_metatype)
     db.session.commit()
+    return jsonify(mtype_schema.jsonify(new_metatype))

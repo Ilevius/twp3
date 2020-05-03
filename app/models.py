@@ -12,10 +12,6 @@ class Metatypes(db.Model):
     def __init__(self, *args, **kwargs):
         super(Metatypes, self).__init__(*args, **kwargs)
     
-    @property
-    def serialize(self):
-        return {'id': self.id, 'name': self.name}
-
 class MtypeSchema(marsh.Schema):
     class Meta:
         fields = ('id', 'name', 'creationdate')
