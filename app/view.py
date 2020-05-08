@@ -80,7 +80,7 @@ def get_type(id):
     return type_schema.jsonify(a_type)
 
 
-# create a type
+# create a type                                                                 to be done
 @app.route('/api/types', methods = ['POST'])
 def add_type():
     name = request.json['name']
@@ -92,7 +92,7 @@ def add_type():
     db.session.commit()
     return mtype_schema.jsonify(new_type)
 
-# update a type
+# update a type                                                             to be done
 @app.route('/api/types/<id>', methods = ['PUT'])
 def update_type(id):
     metatype = Metatypes.query.get(id)
@@ -104,7 +104,7 @@ def update_type(id):
     db.session.commit()
     return mtype_schema.jsonify(metatype)
 
-# delete a type
+# delete a type                                                         to be done
 @app.route('/api/types/<id>', methods = ['DELETE'])
 def delete_type(id):
     delete_metatype = Metatypes.query.get(id)
