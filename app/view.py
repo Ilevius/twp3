@@ -47,21 +47,68 @@ def add_metatype():
 
 # update a metatype
 @app.route('/api/metatypes/<id>', methods = ['PUT'])
-def update_metatype():
-    upd_metatype = Metatypes.query.get(id)
+def update_metatype(id):
+    metatype = Metatypes.query.get(id)
     # obtaining info from request
     name = request.json['name']
     # setting item's properties
-    upd_metatype.name = name
+    metatype.name = name
     # database 
     db.session.commit()
-    return mtype_schema.jsonify(upd_metatype)
+    return mtype_schema.jsonify(metatype)
 
 # delete a metatype
 @app.route('/api/metatypes/<id>', methods = ['DELETE'])
-def delete_metatype():
+def delete_metatype(id):
     delete_metatype = Metatypes.query.get(id)
     # database 
-    db.session.defete(delete_metatype)
+    db.session.delete(delete_metatype)
+    db.session.commit()
+    return mtype_schema.jsonify(delete_metatype)
+
+                                                                            #types API
+# get all types
+@app.route('/api/types', methods = ['GET'])
+def show_types():
+    types = types_schema.dump( Types.query.all() )
+    return jsonify(types)
+
+# get a type by id
+@app.route('/api/types/<id>', methods = ['GET'])
+def get_type(id):
+    a_type = Types.query.get(id)
+    return type_schema.jsonify(a_type)
+
+
+# create a type
+@app.route('/api/types', methods = ['POST'])
+def add_type():
+    name = request.json['name']
+    order = request.json['order']
+
+    new_type = Types(name = name, order = order)
+
+    db.session.add(new_type)
+    db.session.commit()
+    return mtype_schema.jsonify(new_type)
+
+# update a type
+@app.route('/api/types/<id>', methods = ['PUT'])
+def update_type(id):
+    metatype = Metatypes.query.get(id)
+    # obtaining info from request
+    name = request.json['name']
+    # setting item's properties
+    metatype.name = name
+    # database 
+    db.session.commit()
+    return mtype_schema.jsonify(metatype)
+
+# delete a type
+@app.route('/api/types/<id>', methods = ['DELETE'])
+def delete_type(id):
+    delete_metatype = Metatypes.query.get(id)
+    # database 
+    db.session.delete(delete_metatype)
     db.session.commit()
     return mtype_schema.jsonify(delete_metatype)

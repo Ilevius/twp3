@@ -59,7 +59,7 @@ function createMtype() {
         }
 }
 
-const render_editor_mtype = (selected ={name: ''}) => {
+const render_editor_mtype = (selected ={}) => {
     document.querySelector('#editorheader').innerHTML = 'Создание нового метатэга'
     document.querySelector('#editor').innerHTML = `
     <div class="form-group">
