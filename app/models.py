@@ -51,7 +51,7 @@ class MtypeSchema(SQLAlchemySchema):
 mtype_schema =   MtypeSchema()      
 mtypes_schema = MtypeSchema(many=True) 
 
-#                                                                                   schema of  T Y P E S
+#                                                                                   schema of  T Y P E S 
 class TypeSchema(SQLAlchemySchema):
     class Meta:
         model = Types
@@ -59,7 +59,7 @@ class TypeSchema(SQLAlchemySchema):
 
     id = auto_field()
     name = auto_field()
-    #number = auto_field()
+    number = auto_field()
     subs = auto_field()
     metas = auto_field()
 

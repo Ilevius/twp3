@@ -81,7 +81,7 @@ def get_type(id):
     return jsonify(resp)
 
 
-# create a type                                                             has been tested 9 may 2020
+# create a type                                                             to be tested
 @app.route('/api/types', methods = ['POST'])
 def add_type():
     name = request.json['name']
