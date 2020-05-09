@@ -66,7 +66,7 @@ def delete_metatype(id):
     db.session.commit()
     return mtype_schema.jsonify(delete_metatype)
 
-                                                                    #types API
+                                                                    #  T Y P E S   A P I
 # get all types
 @app.route('/api/types', methods = ['GET'])
 def show_types():
@@ -81,7 +81,7 @@ def get_type(id):
     return jsonify(resp)
 
 
-# create a type                                                             to be tested
+# create a type                                                             has been tested 9 may 2020
 @app.route('/api/types', methods = ['POST'])
 def add_type():
     name = request.json['name']
@@ -94,7 +94,7 @@ def add_type():
     resp = type_schema.dump(new_type)
     return jsonify(resp)
 
-# update a type                                                             to be tested
+# update a type                                                             has been tested 9 may 2020
 @app.route('/api/types/<id>', methods = ['PUT'])
 def update_type(id):
     a_type = Types.query.get(id)
@@ -106,13 +106,65 @@ def update_type(id):
     a_type.number = number
     # database 
     db.session.commit()
-    return type_schema.jsonify(a_type)
+    resp = type_schema.dump(a_type)
+    return jsonify(resp)
 
-# delete a type                                                         to be tested
+# delete a type                                                         has been tested 9 may 2020
 @app.route('/api/types/<id>', methods = ['DELETE'])
 def delete_type(id):
     delete_type = Types.query.get(id)
     # database 
     db.session.delete(delete_type)
     db.session.commit()
-    return type_schema.jsonify(delete_type)
+    resp = type_schema.dump(delete_type)
+    return jsonify(resp)
+
+                                                                        #  T O P I C S   A P I
+# get all types
+@app.route('/api/topics', methods = ['GET'])
+def show_topics():
+    topics = topics_schema.dump( Topics.query.all() )
+    return jsonify(topics)
+
+# get a type by id                                                          To be tested
+@app.route('/api/topics/<id>', methods = ['GET'])
+def get_topic(id):
+    a_topic = Topics.query.get(id)
+    resp = topic_schema.dump(a_topic)
+    return jsonify(resp)
+
+
+# create a type                                                             To be tested
+@app.route('/api/topics', methods = ['POST'])
+def add_topic():
+    name = request.json['name']
+
+    new_topic = Topics(name = name)
+
+    db.session.add(new_topic)
+    db.session.commit()
+    resp = topic_schema.dump(new_topic)
+    return jsonify(resp)
+
+# update a type                                                             To be tested
+@app.route('/api/topics/<id>', methods = ['PUT'])
+def update_topic(id):
+    a_topic = Topics.query.get(id)
+    # obtaining info from request
+    name = request.json['name']
+    # setting item's properties
+    a_topic.name = name
+    # database 
+    db.session.commit()
+    resp = topic_schema.dump(a_topic)
+    return jsonify(resp)
+
+# delete a type                                                         To be tested
+@app.route('/api/topics/<id>', methods = ['DELETE'])
+def delete_topic(id):
+    delete_topic = Topics.query.get(id)
+    # database 
+    db.session.delete(delete_topic)
+    db.session.commit()
+    resp = topic_schema.dump(delete_topic)
+    return jsonify(resp)
