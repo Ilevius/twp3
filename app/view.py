@@ -66,49 +66,53 @@ def delete_metatype(id):
     db.session.commit()
     return mtype_schema.jsonify(delete_metatype)
 
-                                                                            #types API
+                                                                    #types API
 # get all types
 @app.route('/api/types', methods = ['GET'])
 def show_types():
     types = types_schema.dump( Types.query.all() )
     return jsonify(types)
 
-# get a type by id
+# get a type by id                                                          has been tested 9 may 2020
 @app.route('/api/types/<id>', methods = ['GET'])
 def get_type(id):
     a_type = Types.query.get(id)
-    return type_schema.jsonify(a_type)
+    resp = type_schema.dump(a_type)
+    return jsonify(resp)
 
 
-# create a type                                                                 to be done
+# create a type                                                             has been tested 9 may 2020
 @app.route('/api/types', methods = ['POST'])
 def add_type():
     name = request.json['name']
-    order = request.json['order']
+    number = request.json['number']
 
-    new_type = Types(name = name, order = order)
+    new_type = Types(name = name, number = number)
 
     db.session.add(new_type)
     db.session.commit()
-    return mtype_schema.jsonify(new_type)
+    resp = type_schema.dump(new_type)
+    return jsonify(resp)
 
-# update a type                                                             to be done
+# update a type                                                             to be tested
 @app.route('/api/types/<id>', methods = ['PUT'])
 def update_type(id):
-    metatype = Metatypes.query.get(id)
+    a_type = Types.query.get(id)
     # obtaining info from request
     name = request.json['name']
+    number = request.json['number']
     # setting item's properties
-    metatype.name = name
+    a_type.name = name
+    a_type.number = number
     # database 
     db.session.commit()
-    return mtype_schema.jsonify(metatype)
+    return type_schema.jsonify(a_type)
 
-# delete a type                                                         to be done
+# delete a type                                                         to be tested
 @app.route('/api/types/<id>', methods = ['DELETE'])
 def delete_type(id):
-    delete_metatype = Metatypes.query.get(id)
+    delete_type = Types.query.get(id)
     # database 
-    db.session.delete(delete_metatype)
+    db.session.delete(delete_type)
     db.session.commit()
-    return mtype_schema.jsonify(delete_metatype)
+    return type_schema.jsonify(delete_type)
