@@ -22,7 +22,7 @@ def devjs():
 
                                                             # API
                                                                         #metatypes API
-# get all metatypes                                                               The return should be remade for all the methods as marsh schemas were changed
+# get all metatypes                                                               has been tested 13 may 2020
 @app.route('/api/metatypes', methods = ['GET'])
 @login_required
 def show_metatypes():
@@ -32,15 +32,15 @@ def show_metatypes():
     else:
         return 'no access'
 
-# get a metatype by id
+# get a metatype by id                                                              has been tested 13 may 2020
 @app.route('/api/metatypes/<id>', methods = ['GET'])
 @login_required
 def get_metatype(id):
     mtype = Metatypes.query.get(id)
-    return mtype_schema.jsonify(mtype)
+    resp = type_schema.dump(mtype)
+    return jsonify(resp)
 
-
-# create a metatype
+# create a metatype                                                                 to be tested
 @app.route('/api/metatypes', methods = ['POST'])
 def add_metatype():
     name = request.json['name']
@@ -49,9 +49,10 @@ def add_metatype():
 
     db.session.add(new_metatype)
     db.session.commit()
-    return mtype_schema.jsonify(new_metatype)
+    resp = type_schema.dump(new_metatype)
+    return jsonify(resp)
 
-# update a metatype
+# update a metatype                                                         to be tested
 @app.route('/api/metatypes/<id>', methods = ['PUT'])
 def update_metatype(id):
     metatype = Metatypes.query.get(id)
@@ -61,16 +62,18 @@ def update_metatype(id):
     metatype.name = name
     # database 
     db.session.commit()
-    return mtype_schema.jsonify(metatype)
+    resp = type_schema.dump(metatype)
+    return jsonify(resp)
 
-# delete a metatype
+# delete a metatype                                                         to be tested
 @app.route('/api/metatypes/<id>', methods = ['DELETE'])
 def delete_metatype(id):
     delete_metatype = Metatypes.query.get(id)
     # database 
     db.session.delete(delete_metatype)
     db.session.commit()
-    return mtype_schema.jsonify(delete_metatype)
+    resp = type_schema.dump(delete_metatype)
+    return jsonify(resp)
 
                                                                     #  T Y P E S   A P I
 # get all types
