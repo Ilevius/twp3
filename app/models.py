@@ -2,6 +2,7 @@ from app import *
 from datetime import datetime
 from flask_marshmallow import Marshmallow
 from marshmallow_sqlalchemy import SQLAlchemySchema, auto_field
+#from flask_security import UserMixin, RoleMixin
 
 #                                                               assosiation table for  M E T A T Y P E S  &  T Y P E S
 metatypes_types = db.Table('metatypes_types',

@@ -120,13 +120,13 @@ def delete_type(id):
     return jsonify(resp)
 
                                                                         #  T O P I C S   A P I
-# get all types
+# get all types                                                                                     has been tested 10 may 2020
 @app.route('/api/topics', methods = ['GET'])
 def show_topics():
     topics = topics_schema.dump( Topics.query.all() )
     return jsonify(topics)
 
-# get a type by id                                                          To be tested
+# get a type by id                                                          has been tested 10 may 2020
 @app.route('/api/topics/<id>', methods = ['GET'])
 def get_topic(id):
     a_topic = Topics.query.get(id)
@@ -134,7 +134,7 @@ def get_topic(id):
     return jsonify(resp)
 
 
-# create a type                                                             To be tested
+# create a type                                                             has been tested 10 may 2020
 @app.route('/api/topics', methods = ['POST'])
 def add_topic():
     name = request.json['name']
@@ -146,7 +146,7 @@ def add_topic():
     resp = topic_schema.dump(new_topic)
     return jsonify(resp)
 
-# update a type                                                             To be tested
+# update a type                                                             has been tested 10 may 2020
 @app.route('/api/topics/<id>', methods = ['PUT'])
 def update_topic(id):
     a_topic = Topics.query.get(id)
@@ -159,7 +159,7 @@ def update_topic(id):
     resp = topic_schema.dump(a_topic)
     return jsonify(resp)
 
-# delete a type                                                         To be tested
+# delete a type                                                         has been tested 10 may 2020
 @app.route('/api/topics/<id>', methods = ['DELETE'])
 def delete_topic(id):
     delete_topic = Topics.query.get(id)
