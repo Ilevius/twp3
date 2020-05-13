@@ -16,19 +16,25 @@ def reg():
     return render_template('registration.html')
 
 @app.route('/javascript-development')
+@login_required
 def devjs():
     return render_template('devjs.html')
 
                                                             # API
                                                                         #metatypes API
-# get all metatypes
+# get all metatypes                                                               The return should be remade for all the methods as marsh schemas were changed
 @app.route('/api/metatypes', methods = ['GET'])
+@login_required
 def show_metatypes():
-    metatypes = mtypes_schema.dump( Metatypes.query.all() )
-    return jsonify(metatypes)
+    if current_user.has_role('Администратор'):
+        metatypes = mtypes_schema.dump( Metatypes.query.all() )
+        return jsonify(metatypes)
+    else:
+        return 'no access'
 
 # get a metatype by id
 @app.route('/api/metatypes/<id>', methods = ['GET'])
+@login_required
 def get_metatype(id):
     mtype = Metatypes.query.get(id)
     return mtype_schema.jsonify(mtype)
