@@ -47,7 +47,7 @@ topics_types = db.Table('topics_types',
 class Metatypes(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(140), unique=True)
-    subs = db.relationship('Types', secondary=metatypes_types, backref = db.backref('metas', lazy='dynamic') )
+    types = db.relationship('Types', secondary=metatypes_types, backref = db.backref('metas', lazy='dynamic') )
     
     
 #                                                               class of  T Y P E S
@@ -55,7 +55,7 @@ class Types(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(140), unique=True)
     number = db.Column(db.Integer)
-    subs = db.relationship('Topics', secondary=topics_types, backref = db.backref('metas', lazy='dynamic') )
+    topics = db.relationship('Topics', secondary=topics_types, backref = db.backref('metas', lazy='dynamic') )
 
 #                                                               The class of  T O P I C S
 class Topics(db.Model):
@@ -66,7 +66,7 @@ class Topics(db.Model):
 
 #                                                           Marshmellow's schemas
 #                                                                                 schema of  M E T A T Y P E S
-
+ma = Marshmallow(app)
 
 class MtypeSchema(SQLAlchemySchema):
     class Meta:
@@ -75,10 +75,14 @@ class MtypeSchema(SQLAlchemySchema):
 
     id = auto_field()
     name = auto_field()
-    subs = auto_field()
+    types = auto_field()
+
+    info = ma.Hyperlinks(
+        {"kind": 'metatype', "content": 'types'}
+    )
 
 mtype_schema =   MtypeSchema()      
-mtypes_schema = MtypeSchema( many=True) 
+mtypes_schema = MtypeSchema(many=True) 
 
 #                                                                                   schema of  T Y P E S 
 class TypeSchema(SQLAlchemySchema):
@@ -89,7 +93,7 @@ class TypeSchema(SQLAlchemySchema):
     id = auto_field()
     name = auto_field()
     number = auto_field()
-    subs = auto_field()
+    topics = auto_field()
     metas = auto_field()
 
 type_schema =   TypeSchema()      
@@ -103,7 +107,7 @@ class TopicSchema(SQLAlchemySchema):
 
     id = auto_field()
     name = auto_field()
-    #subs = auto_field()                                this field will rise as ask object appears
+    #asks = auto_field()                                this field will rise as ask object appears
     metas = auto_field()
 
 topic_schema =   TopicSchema()      

@@ -32,12 +32,12 @@ def show_metatypes():
     else:
         return 'no access'
 
-# get a metatype by id                                                              has been tested 13 may 2020
+# get a metatype by id                                                              has been tested 14 may 2020
 @app.route('/api/metatypes/<id>', methods = ['GET'])
 @login_required
 def get_metatype(id):
     mtype = Metatypes.query.get(id)
-    resp = type_schema.dump(mtype)
+    resp = mtype_schema.dump(mtype)
     return jsonify(resp)
 
 # create a metatype                                                                 to be tested
