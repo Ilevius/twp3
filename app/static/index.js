@@ -1,20 +1,20 @@
-const mtype_url = '/api/metatypes';
+const api_url = '/api/';
 
 let mtypes = []
 let selected_mtype = []
 
 //                                      Metatype's CRUD 
-class MtypeApi {
-    static fetch() {
-        return fetch(mtype_url, {method: 'get'}).then(res => res.json())
+class Api {
+    static fetch(object) {
+        return fetch(api_url+object, {method: 'get'}).then(res => res.json())
     }
 
-    static fetch_one(id) {
-        return fetch(mtype_url+'/'+id, {method: 'get'}).then(res => res.json())
+    static fetch_one(object, id) {
+        return fetch(api_url+object+'/'+id, {method: 'get'}).then(res => res.json())
     }
 
-    static create(Mtype) {
-        return fetch(mtype_url, {
+    static create(object, Mtype) {
+        return fetch(api_url+object, {
             method: 'post',
             body: JSON.stringify(Mtype),
             headers: {
@@ -24,8 +24,8 @@ class MtypeApi {
         }).then( res => res.json() )
     }
 
-    static update(Mtype, id) {
-        return fetch(mtype_url+'/'+id, {
+    static update(object, Mtype, id) {
+        return fetch(api_url+object+'/'+id, {
             method: 'put',
             body: JSON.stringify(Mtype),
             headers: {
@@ -35,8 +35,8 @@ class MtypeApi {
         }).then( res => res.json() )
     }
 
-    static delete(id) {
-        return fetch(mtype_url+'/'+id, {method: 'delete'}).then(res => res.json())
+    static delete(object, id) {
+        return fetch(api_url+object+'/'+id, {method: 'delete'}).then(res => res.json())
     }
 
 }
@@ -67,9 +67,9 @@ function createMtype() {
                 name: nameField.value
             }
         
-            MtypeApi.create(newMtype).then( () => {
+            Api.create('metatypes', newMtype).then( () => {
                 alert('Saved!')
-                MtypeApi.fetch().then(backendMtypes => {
+                Api.fetch('metatypes').then(backendMtypes => {
                     mtypes = backendMtypes.concat()
                     renderMtypes(mtypes)
                 })
@@ -95,7 +95,7 @@ const render_editor_mtype = (selected ={}) => {
 
 document.addEventListener('DOMContentLoaded', ()=>{
     document.querySelector('#newmtype').addEventListener('click', render_editor_mtype)
-    MtypeApi.fetch().then(backendMtypes => {
+    Api.fetch('metatypes').then(backendMtypes => {
         mtypes = backendMtypes.concat()
         renderMtypes(mtypes)
     })

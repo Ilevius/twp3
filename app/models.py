@@ -43,10 +43,12 @@ topics_types = db.Table('topics_types',
 )
 
 #                                                               class of  M E T A T Y P E S
+
 class Metatypes(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(140), unique=True)
     subs = db.relationship('Types', secondary=metatypes_types, backref = db.backref('metas', lazy='dynamic') )
+    
     
 #                                                               class of  T Y P E S
 class Types(db.Model):
@@ -64,6 +66,8 @@ class Topics(db.Model):
 
 #                                                           Marshmellow's schemas
 #                                                                                 schema of  M E T A T Y P E S
+
+
 class MtypeSchema(SQLAlchemySchema):
     class Meta:
         model = Metatypes
@@ -74,7 +78,7 @@ class MtypeSchema(SQLAlchemySchema):
     subs = auto_field()
 
 mtype_schema =   MtypeSchema()      
-mtypes_schema = MtypeSchema(many=True) 
+mtypes_schema = MtypeSchema( many=True) 
 
 #                                                                                   schema of  T Y P E S 
 class TypeSchema(SQLAlchemySchema):
@@ -99,7 +103,7 @@ class TopicSchema(SQLAlchemySchema):
 
     id = auto_field()
     name = auto_field()
-    #subs = auto_field()
+    #subs = auto_field()                                this field will rise as ask object appears
     metas = auto_field()
 
 topic_schema =   TopicSchema()      
