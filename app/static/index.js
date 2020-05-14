@@ -3,11 +3,16 @@ const mtype_url = '/api/metatypes';
 let mtypes = []
 let selected_mtype = []
 
-
+//                                      Metatype's CRUD 
 class MtypeApi {
     static fetch() {
         return fetch(mtype_url, {method: 'get'}).then(res => res.json())
     }
+
+    static fetch_one(id) {
+        return fetch(mtype_url+'/'+id, {method: 'get'}).then(res => res.json())
+    }
+
     static create(Mtype) {
         return fetch(mtype_url, {
             method: 'post',
@@ -16,11 +21,26 @@ class MtypeApi {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             }
-        }).then( ()=>{
-            
-        } )
+        }).then( res => res.json() )
     }
+
+    static update(Mtype, id) {
+        return fetch(mtype_url+'/'+id, {
+            method: 'put',
+            body: JSON.stringify(Mtype),
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        }).then( res => res.json() )
+    }
+
+    static delete(id) {
+        return fetch(mtype_url+'/'+id, {method: 'delete'}).then(res => res.json())
+    }
+
 }
+
 
 const show_mtype = mtype => {
     return `
