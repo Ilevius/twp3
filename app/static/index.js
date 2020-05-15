@@ -45,14 +45,10 @@ class Api {
 
 function render_tree(object){
     // fetching of the object's content range
-    content_objects = object.subs.map(i=>{Api.fetch_one(object.info.content+'/'+i)})
-    // converting content into the string, PekyPcuR ))
-    str_content = content_objects.map( i=>{render_tree(i)} ).join(' ')
-    // generating of the output string
-    return `
-    <li>${object.name}
-    <ul>${str_content}</ul>
-    </li>`
+    let content_objects = []
+    async function shit () {object.subs.map(id=>{ Api.fetch(object.info.content+'/'+id).then( res=>{content_objects.push( render_tree(res) )} ) })}
+    shit().then(console.log(content_objects ))
+    return `<li>${object.name}<ul>${content_objects}</ul></li>` 
 }
 
 
@@ -111,9 +107,10 @@ const render_editor_mtype = (selected ={}) => {
 
 document.addEventListener('DOMContentLoaded', ()=>{
     document.querySelector('#newmtype').addEventListener('click', render_editor_mtype)
-    Api.fetch('metatypes').then(backendMtypes => {
-        mtypes = backendMtypes.concat()
-        renderMtypes(mtypes)
+    Api.fetch_one('metatypes/2').then(backendMtypes => {
+        const $mtypes = document.querySelector('#tree')
+        //$mtypes.innerHTML = backendMtypes
+        $mtypes.innerHTML = render_tree(backendMtypes)
     })
 })
 
