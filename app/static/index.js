@@ -3,20 +3,20 @@ const api_url = '/api/';
 let mtypes = []
 let selected_mtype = []
 
-//                                      Metatype's CRUD 
+//                                      API CRUD first layer
 class Api {
-    static fetch(object) {
-        return fetch(api_url+object, {method: 'get'}).then(res => res.json())
+    static fetch(object_url) {
+        return fetch(api_url+object_url, {method: 'get'}).then(res => res.json())
     }
 
-    static fetch_one(object, id) {
-        return fetch(api_url+object+'/'+id, {method: 'get'}).then(res => res.json())
+    static fetch_one(object_url) {
+        return fetch(api_url+object_url, {method: 'get'}).then(res => res.json())
     }
 
-    static create(object, Mtype) {
-        return fetch(api_url+object, {
+    static create(object_url, object) {
+        return fetch(api_url+object_url, {
             method: 'post',
-            body: JSON.stringify(Mtype),
+            body: JSON.stringify(object),
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
@@ -24,10 +24,10 @@ class Api {
         }).then( res => res.json() )
     }
 
-    static update(object, Mtype, id) {
-        return fetch(api_url+object+'/'+id, {
+    static update(object_url, object) {
+        return fetch(api_url+object_url, {
             method: 'put',
-            body: JSON.stringify(Mtype),
+            body: JSON.stringify(object),
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
@@ -35,11 +35,27 @@ class Api {
         }).then( res => res.json() )
     }
 
-    static delete(object, id) {
-        return fetch(api_url+object+'/'+id, {method: 'delete'}).then(res => res.json())
+    static delete(object_url) {
+        return fetch(api_url+object_url, {method: 'delete'}).then(res => res.json())
     }
 
 }
+
+
+
+function render_tree(object){
+    // fetching of the object's content range
+    content_objects = object.subs.map(i=>{Api.fetch_one(object.info.content+'/'+i)})
+    // converting content into the string, PekyPcuR ))
+    str_content = content_objects.map( i=>{render_tree(i)} ).join(' ')
+    // generating of the output string
+    return `
+    <li>${object.name}
+    <ul>${str_content}</ul>
+    </li>`
+}
+
+
 
 
 const show_mtype = mtype => {

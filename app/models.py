@@ -47,7 +47,7 @@ topics_types = db.Table('topics_types',
 class Metatypes(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(140), unique=True)
-    types = db.relationship('Types', secondary=metatypes_types, backref = db.backref('metas', lazy='dynamic') )
+    subs = db.relationship('Types', secondary=metatypes_types, backref = db.backref('metas', lazy='dynamic') )
     
     
 #                                                               class of  T Y P E S
@@ -55,7 +55,7 @@ class Types(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(140), unique=True)
     number = db.Column(db.Integer)
-    topics = db.relationship('Topics', secondary=topics_types, backref = db.backref('metas', lazy='dynamic') )
+    subs = db.relationship('Topics', secondary=topics_types, backref = db.backref('metas', lazy='dynamic') )
 
 #                                                               The class of  T O P I C S
 class Topics(db.Model):
@@ -75,7 +75,7 @@ class MtypeSchema(SQLAlchemySchema):
 
     id = auto_field()
     name = auto_field()
-    types = auto_field()
+    subs = auto_field()
 
     info = ma.Hyperlinks(
         {"kind": 'metatype', "content": 'types'}
@@ -93,8 +93,12 @@ class TypeSchema(SQLAlchemySchema):
     id = auto_field()
     name = auto_field()
     number = auto_field()
-    topics = auto_field()
+    subs = auto_field()
     metas = auto_field()
+
+    info = ma.Hyperlinks(
+        {"kind": 'types', "content": 'topics'}
+    )
 
 type_schema =   TypeSchema()      
 types_schema = TypeSchema(many=True) 
@@ -109,6 +113,10 @@ class TopicSchema(SQLAlchemySchema):
     name = auto_field()
     #asks = auto_field()                                this field will rise as ask object appears
     metas = auto_field()
+
+    info = ma.Hyperlinks(
+        {"kind": 'topics', "content": 'asks'}
+    )
 
 topic_schema =   TopicSchema()      
 topics_schema = TopicSchema(many=True) 
