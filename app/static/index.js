@@ -9,10 +9,6 @@ class Api {
         return fetch(api_url+object_url, {method: 'get'}).then(res => res.json())
     }
 
-    static fetch_one(object_url) {
-        return fetch(api_url+object_url, {method: 'get'}).then(res => res.json())
-    }
-
     static create(object_url, object) {
         return fetch(api_url+object_url, {
             method: 'post',
@@ -42,15 +38,37 @@ class Api {
 }
 
 
-
-function render_tree(object){
-    // fetching of the object's content range
-    let content_objects = []
-    async function shit () {object.subs.map(id=>{ Api.fetch(object.info.content+'/'+id).then( res=>{content_objects.push( render_tree(res) )} ) })}
-    shit().then(console.log(content_objects ))
-    return `<li>${object.name}<ul>${content_objects}</ul></li>` 
+/*
+function render_tree(object, place){
+    const chain = new Promise((resolve, reject)=>{
+        let ins = `<li id = "${object.id}" class = "${object.info.kind}">${object.name}<ul id ="${object.info.kind+object.id}"></ul></li>`
+        place.insertAdjacentHTML("beforeend", ins)
+        let content_objects = []
+        object.subs.map(id=>{ Api.fetch(object.info.content+'/'+id).then( (res)=>{content_objects.push(res)} ) })
+        console.log(content_objects)
+        resolve(content_objects)        
+    })
+    chain.then((result)=>{
+        for(let i in result){console.log(i)}
+        let $newplace = document.querySelector(`#${object.info.kind+object.id}`)
+        //result.map( (elem)=>{ render_tree(elem, $newplace) } )
+        
+    })
 }
 
+}*/
+
+
+function render_tree(object, place){
+    const chain = new Promise((resolve, reject)=>{
+        let ins = `<li id = "${object.id}" class = "${object.info.kind}">${object.name}<ul id ="${object.info.kind+object.id}"></ul></li>`
+        place.insertAdjacentHTML("beforeend", ins)
+        resolve()        
+    })
+    chain.then((result)=>{
+        if(object.subs){object.subs.map(id=>{ Api.fetch(object.info.content+'/'+id).then( (res)=>{render_tree(res, document.querySelector(`#${object.info.kind+object.id}`))} ) })}
+    })
+}
 
 
 
@@ -107,10 +125,9 @@ const render_editor_mtype = (selected ={}) => {
 
 document.addEventListener('DOMContentLoaded', ()=>{
     document.querySelector('#newmtype').addEventListener('click', render_editor_mtype)
-    Api.fetch_one('metatypes/2').then(backendMtypes => {
+    Api.fetch('metatypes').then(backendMtypes => {
         const $mtypes = document.querySelector('#tree')
-        //$mtypes.innerHTML = backendMtypes
-        $mtypes.innerHTML = render_tree(backendMtypes)
+        backendMtypes.map((el)=>{render_tree(el, $mtypes)})
     })
 })
 
