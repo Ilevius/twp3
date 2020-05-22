@@ -1,0 +1,20 @@
+li.metatype{
+    font-weight: bold;
+}
+
+li.types{
+    font-weight: normal;
+    font-style: oblique;
+
+}
+
+li.topics{
+    font-style: normal;
+    color:blue;
+    
+
+}
+
+.bold{
+    font-weight: bold;
+}

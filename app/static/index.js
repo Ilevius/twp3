@@ -38,56 +38,33 @@ class Api {
 }
 
 
-/*
-function render_tree(object, place){
-    const chain = new Promise((resolve, reject)=>{
-        let ins = `<li id = "${object.id}" class = "${object.info.kind}">${object.name}<ul id ="${object.info.kind+object.id}"></ul></li>`
-        place.insertAdjacentHTML("beforeend", ins)
-        let content_objects = []
-        object.subs.map(id=>{ Api.fetch(object.info.content+'/'+id).then( (res)=>{content_objects.push(res)} ) })
-        console.log(content_objects)
-        resolve(content_objects)        
-    })
-    chain.then((result)=>{
-        for(let i in result){console.log(i)}
-        let $newplace = document.querySelector(`#${object.info.kind+object.id}`)
-        //result.map( (elem)=>{ render_tree(elem, $newplace) } )
-        
-    })
-}
-
-}*/
-
-
-function render_tree(object, place){
-    const chain = new Promise((resolve, reject)=>{
-        let ins = `<li id = "${object.id}" class = "${object.info.kind}">${object.name}<ul id ="${object.info.kind+object.id}"></ul></li>`
-        place.insertAdjacentHTML("beforeend", ins)
-        resolve()        
-    })
-    chain.then((result)=>{
-        if(object.subs){object.subs.map(id=>{ Api.fetch(object.info.content+'/'+id).then( (res)=>{render_tree(res, document.querySelector(`#${object.info.kind+object.id}`))} ) })}
-    })
-}
 
 
 
-const show_mtype = mtype => {
-    return `
-    <li>${mtype.name}</li>
-    `
-}
 
-function renderMtypes(_mtypes = []) {
-    const $mtypes = document.querySelector('#tree')
-
-    if (_mtypes.length > 0) {
-        $mtypes.innerHTML = _mtypes.map(elem => show_mtype(elem)).join(' ')
-
-    } else {
-        $mtypes.innerHTML = '<div>Пока нет метатэгов</div>'
+function show_tree (){
+    const $tree_place = document.querySelector('#tree')
+    function render_tree(object, place){
+        const chain = new Promise((resolve, reject)=>{
+            let ins = `<li id = "${object.id}" class = "${object.info.kind}"><span onclick="tree_listener()">${object.name}</span><ul id ="${object.info.kind+object.id}"></ul></li>`
+            place.insertAdjacentHTML("beforeend", ins)
+            $tree_spiner = document.querySelector('#tree_spiner')
+            resolve()        
+        })
+        chain.then((result)=>{
+            if(object.subs){object.subs.map(id=>{ Api.fetch(object.info.content+'/'+id).then( (res)=>{render_tree(res, document.querySelector(`#${object.info.kind+object.id}`))} ) })}
+        })
     }
+    $tree_place.innerHTML = ''
+    Api.fetch('metatypes').then(backendMtypes => {
+        backendMtypes.map( (el)=>{render_tree(el, $tree_place) })
+    })
 }
+
+
+
+
+
 
 function createMtype() {
     const nameField = document.querySelector('#itemName')
@@ -98,23 +75,32 @@ function createMtype() {
             }
         
             Api.create('metatypes', newMtype).then( () => {
-                alert('Saved!')
-                Api.fetch('metatypes').then(backendMtypes => {
-                    mtypes = backendMtypes.concat()
-                    renderMtypes(mtypes)
-                })
-
+                alert('Новый метатэг сохранен!')
+                show_tree()
                 nameField.value = ''
             })    
         }
 }
 
-const render_editor_mtype = (selected ={}) => {
-    document.querySelector('#editorheader').innerHTML = 'Создание нового метатэга'
+const render_editor_mtype = (selected_obj) => {
+    switch (selected_obj.info.kind) {
+        case 'metatypes': 
+            document.querySelector('#editorheader').innerHTML = 'Редактирование   <div class="bold">М Е Т А Т Э Г А</div>';
+            break;
+
+        case 'types': 
+            document.querySelector('#editorheader').innerHTML = 'Редактирование   <div class="bold">Т Э Г А</div>';
+            break;  
+            
+        case 'topics': 
+            document.querySelector('#editorheader').innerHTML = 'Редактирование   <div class="bold"> Т Е М Ы</div>';
+            break;    
+    }
+
     document.querySelector('#editor').innerHTML = `
     <div class="form-group">
     <label for="itemName">Имя</label>
-    <input type="text" class="form-control" id="itemName" value="${selected.name}">
+    <input type="text" class="form-control" id="itemName" value="${selected_obj.name}">
     <br>
     <button type="button" class="btn btn-success btn-sm" id = "saveMtype">Сохранить метатэг</button>
     </div>
@@ -122,13 +108,16 @@ const render_editor_mtype = (selected ={}) => {
     document.querySelector('#saveMtype').addEventListener('click', createMtype)
 }
 
+function tree_listener() {
+    Api.fetch(event.target.parentNode.className+'/'+event.target.parentNode.id).then( (opened)=>{
+        render_editor_mtype(opened)
+    })
+}
 
 document.addEventListener('DOMContentLoaded', ()=>{
-    document.querySelector('#newmtype').addEventListener('click', render_editor_mtype)
-    Api.fetch('metatypes').then(backendMtypes => {
-        const $mtypes = document.querySelector('#tree')
-        backendMtypes.map((el)=>{render_tree(el, $mtypes)})
-    })
+    document.querySelector('#newmtype').addEventListener('click', ()=>{ render_editor_mtype() })
+    show_tree()
+   
 })
 
 
