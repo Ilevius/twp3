@@ -47,7 +47,7 @@ topics_types = db.Table('topics_types',
 class Metatypes(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(140), unique=True)
-    subs = db.relationship('Types', secondary=metatypes_types, backref = db.backref('metas', lazy='dynamic') )
+    subs = db.relationship('Types', secondary=metatypes_types, backref = db.backref('metas', lazy='joined') )
     
     
 #                                                               class of  T Y P E S
@@ -78,7 +78,7 @@ class MtypeSchema(SQLAlchemySchema):
     subs = auto_field()
 
     info = ma.Hyperlinks(
-        {"kind": 'metatype', "content": 'types'}
+        {"kind": 'metatypes', "content": 'types'}
     )
 
 mtype_schema =   MtypeSchema()      

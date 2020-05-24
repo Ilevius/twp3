@@ -108,11 +108,10 @@ def add_type():
 def update_type(id):
     a_type = Types.query.get(id)
     # obtaining info from request
-    name = request.json['name']
-    number = request.json['number']
-    # setting item's properties
-    a_type.name = name
-    a_type.number = number
+    if request.json['name']:
+        a_type.name = request.json['name']
+    if 'request.json["number"]' in locals() :
+        a_type.name = request.json['number']
     # database 
     db.session.commit()
     resp = type_schema.dump(a_type)

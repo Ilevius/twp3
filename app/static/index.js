@@ -1,7 +1,7 @@
 const api_url = '/api/';
 
 let mtypes = []
-let selected_mtype = []
+let selected_item = []
 
 //                                      API CRUD first layer
 class Api {
@@ -66,23 +66,40 @@ function show_tree (){
 
 
 
-function createMtype() {
-    const nameField = document.querySelector('#itemName')
-    if(nameField.value == ''){alert('Имя не должно быть пустым')}
-    else{
-            const newMtype = {
-                name: nameField.value
+
+const render_editor_create = (creature) => {
+
+    function createMtype() {
+        const nameField = document.querySelector('#itemName')
+        if(nameField.value == ''){alert('Имя не должно быть пустым')}
+        else{
+                const newMtype = {
+                    name: nameField.value
+                }
+            
+                Api.create('metatypes', newMtype).then( () => {
+                    alert('Новый метатэг сохранен!')
+                    show_tree()
+                    nameField.value = ''
+                })    
             }
-        
-            Api.create('metatypes', newMtype).then( () => {
-                alert('Новый метатэг сохранен!')
-                show_tree()
-                nameField.value = ''
-            })    
-        }
+    }
+    
+    document.querySelector('#editorheader').innerHTML = 'Редактирование   <div class="bold">М Е Т А Т Э Г А</div>';
+
+    document.querySelector('#editor').innerHTML = `
+    <div class="form-group">
+    <label for="itemName">Имя</label>
+    <input type="text" class="form-control" id="itemName" value="">
+    <br>
+    <button type="button" class="btn btn-success btn-sm" id = "saveData">Сохранить метатэг</button>
+    </div>
+    `
+    document.querySelector('#saveData').addEventListener('click', createMtype)
 }
 
-const render_editor_mtype = (selected_obj) => {
+
+const render_editor_change = (selected_obj) => {
     switch (selected_obj.info.kind) {
         case 'metatypes': 
             document.querySelector('#editorheader').innerHTML = 'Редактирование   <div class="bold">М Е Т А Т Э Г А</div>';
@@ -102,15 +119,25 @@ const render_editor_mtype = (selected_obj) => {
     <label for="itemName">Имя</label>
     <input type="text" class="form-control" id="itemName" value="${selected_obj.name}">
     <br>
-    <button type="button" class="btn btn-success btn-sm" id = "saveMtype">Сохранить метатэг</button>
     </div>
     `
-    document.querySelector('#saveMtype').addEventListener('click', createMtype)
+    document.querySelector('#itemName').addEventListener('change', (event)=>{
+        const delta = {
+            name: event.target.value
+        }
+    
+        Api.update(selected_obj.info.kind+"/"+selected_obj.id, delta).then( (back_answer) => {
+            alert('Изменения сохранены!')
+            show_tree()
+            render_editor_change(back_answer)
+        })    
+
+    })
 }
 
 function tree_listener() {
     Api.fetch(event.target.parentNode.className+'/'+event.target.parentNode.id).then( (opened)=>{
-        render_editor_mtype(opened)
+        render_editor_change(opened)
     })
 }
 
