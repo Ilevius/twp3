@@ -48,7 +48,18 @@ class Metatypes(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(140), unique=True)
     subs = db.relationship('Types', secondary=metatypes_types, backref = db.backref('metas', lazy='joined') )
-    
+
+    @property 
+    def serialize(self):
+        return {
+            "kind": "metatypes",
+            "id": self.id,
+            "name": self.name,
+            "subs": self.serialize_subs
+        }
+    @property
+    def serialize_subs(self):
+        return[item.serialize for item in self.subs]    
     
 #                                                               class of  T Y P E S
 class Types(db.Model):
@@ -57,11 +68,32 @@ class Types(db.Model):
     number = db.Column(db.Integer)
     subs = db.relationship('Topics', secondary=topics_types, backref = db.backref('metas', lazy='dynamic') )
 
+    @property 
+    def serialize(self):
+        return {
+            "kind": "types",
+            "id": self.id,
+            "name": self.name,
+            "subs": self.serialize_subs
+        }
+    @property
+    def serialize_subs(self):
+        return[item.serialize for item in self.subs]    
+
 #                                                               The class of  T O P I C S
 class Topics(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(140), unique=True)
     shortname = db.Column(db.String(140), unique=True)
+
+    @property
+    def serialize(self):
+        return {
+            "kind": "topics",
+            "id": self.id,
+            "name": self.name
+        }
+
 
 
 #                                                           Marshmellow's schemas

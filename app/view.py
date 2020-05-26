@@ -21,6 +21,15 @@ def devjs():
     return render_template('devjs.html')
 
                                                             # API
+                                                                        #get tree 
+# get all metatypes                                                               has been tested 13 may 2020
+@app.route('/api/tree', methods = ['GET'])
+def tree():
+    res = Metatypes.query.get(2)
+    return res.serialize
+
+
+
                                                                         #metatypes API
 # get all metatypes                                                               has been tested 13 may 2020
 @app.route('/api/metatypes', methods = ['GET'])
