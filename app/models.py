@@ -55,6 +55,7 @@ class Metatypes(db.Model):
             "kind": "metatypes",
             "id": self.id,
             "name": self.name,
+            "number": self.id,
             "subs": self.serialize_subs
         }
     @property
@@ -75,6 +76,7 @@ class Types(db.Model):
             "id": self.id,
             "name": self.name,
             "number": self.number,
+            "order": 'by number',
             "subs": self.serialize_subs
         }
     @property
@@ -94,6 +96,7 @@ class Topics(db.Model):
             "kind": "topics",
             "id": self.id,
             "name": self.name,
+            "number": self.id,
             "subs": somelist
         }
 

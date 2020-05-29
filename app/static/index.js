@@ -45,13 +45,19 @@ class Api {
 
 async function print_tree(){
     const $tree_place = document.querySelector('#tree')
+
+    function sortByNumber(arr) {
+        arr.sort((a, b) => a.number > b.number ? 1 : -1);
+      }
+
     function subs(items){
+        sortByNumber(items)
         return items.map((el)=>{return tree_str(el)}).join('')
     }
 
     function tree_str(obj){
         let number = ''
-        if(obj.number){number = obj.number}
+        if(obj.order){number = obj.number}
         return `<li class = "${obj.kind}" id = "${obj.id}">${number} ${obj.name}<ul>${subs(obj.subs)}</ul></li>`
     }
 
@@ -60,17 +66,6 @@ async function print_tree(){
     $tree_place.innerHTML = text
 }
 
-function test1(){
-
-}
-/*
-    const tree_srtingify = new Promise((resolve, reject)=>{
-        let text = reqsplorer(tree)
-        resolve(text)
-    })
-    let result = await tree_srtingify
-
-*/ 
 
 function show_tree (){
     const $tree_place = document.querySelector('#tree')
