@@ -74,6 +74,7 @@ class Types(db.Model):
             "kind": "types",
             "id": self.id,
             "name": self.name,
+            "number": self.number,
             "subs": self.serialize_subs
         }
     @property

@@ -33,7 +33,7 @@ def tree():
     
     result = {
         "id": 0,
-        "name": 'tree',
+        "name": 'Все метатэги',
         "subs": mtypes_list
     }
 

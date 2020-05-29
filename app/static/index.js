@@ -43,29 +43,21 @@ class Api {
 
 
 
-function print_tree(){
+async function print_tree(){
     const $tree_place = document.querySelector('#tree')
-
-    function reqsplorer(tree){
-        return new Promise((res, rej)=>{
-            subs(tree.subs).then((result)=>{
-                res(`<li>${tree.name}<ul>${result}</ul></li>`)
-            })
-        })
-        
+    function subs(items){
+        return items.map((el)=>{return tree_str(el)}).join('')
     }
 
-    function subs(subs_array){
-        return new Promise((res, rej)=>{
-            let content = 'before'
-            content = subs_array.map( (el)=>{reqsplorer(el).then((res)=>{return res})} ).join('')
-            res(content)
-        })
+    function tree_str(obj){
+        let number = ''
+        if(obj.number){number = obj.number}
+        return `<li class = "${obj.kind}" id = "${obj.id}">${number} ${obj.name}<ul>${subs(obj.subs)}</ul></li>`
     }
 
-    Api.tree().then( (tree)=>{
-        return reqsplorer(tree)
-    }).then((result)=>{$tree_place.innerHTML = result})
+    let tree = await Api.tree()
+    let text = tree_str(tree)
+    $tree_place.innerHTML = text
 }
 
 function test1(){
