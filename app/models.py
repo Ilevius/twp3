@@ -88,10 +88,12 @@ class Topics(db.Model):
 
     @property
     def serialize(self):
+        somelist = []
         return {
             "kind": "topics",
             "id": self.id,
-            "name": self.name
+            "name": self.name,
+            "subs": somelist
         }
 
 

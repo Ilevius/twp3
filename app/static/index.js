@@ -5,6 +5,10 @@ let selected_item = []
 
 //                                      API CRUD first layer
 class Api {
+    static tree(){
+        return fetch(api_url+'/tree', {method: 'get'}).then(res => res.json())
+    }
+
     static fetch(object_url) {
         return fetch(api_url+object_url, {method: 'get'}).then(res => res.json())
     }
@@ -39,8 +43,42 @@ class Api {
 
 
 
+function print_tree(){
+    const $tree_place = document.querySelector('#tree')
 
+    function reqsplorer(tree){
+        return new Promise((res, rej)=>{
+            subs(tree.subs).then((result)=>{
+                res(`<li>${tree.name}<ul>${result}</ul></li>`)
+            })
+        })
+        
+    }
 
+    function subs(subs_array){
+        return new Promise((res, rej)=>{
+            let content = 'before'
+            content = subs_array.map( (el)=>{reqsplorer(el).then((res)=>{return res})} ).join('')
+            res(content)
+        })
+    }
+
+    Api.tree().then( (tree)=>{
+        return reqsplorer(tree)
+    }).then((result)=>{$tree_place.innerHTML = result})
+}
+
+function test1(){
+
+}
+/*
+    const tree_srtingify = new Promise((resolve, reject)=>{
+        let text = reqsplorer(tree)
+        resolve(text)
+    })
+    let result = await tree_srtingify
+
+*/ 
 
 function show_tree (){
     const $tree_place = document.querySelector('#tree')
@@ -143,7 +181,8 @@ function tree_listener() {
 
 document.addEventListener('DOMContentLoaded', ()=>{
     document.querySelector('#newmtype').addEventListener('click', ()=>{ render_editor_mtype() })
-    show_tree()
+    //show_tree()
+    print_tree()
    
 })
 

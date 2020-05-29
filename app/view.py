@@ -25,9 +25,19 @@ def devjs():
 # get all metatypes                                                               has been tested 13 may 2020
 @app.route('/api/tree', methods = ['GET'])
 def tree():
-    res = Metatypes.query.get(2)
-    return res.serialize
 
+    mtypes_list = []
+    
+    for mtype in Metatypes.query.all():
+        mtypes_list.append( mtype.serialize )
+    
+    result = {
+        "id": 0,
+        "name": 'tree',
+        "subs": mtypes_list
+    }
+
+    return result
 
 
                                                                         #metatypes API
